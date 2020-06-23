@@ -54,7 +54,7 @@ function getsign() {
         sy.post(signurl, (error, response, data) => {
             sy.log(`${CookieName}, data: ${data}`)
             let result = JSON.parse(data)
-            if (result.error_no == 0) {
+            if (result.err_no == 0) {
                 signres = `签到成功🎉`
                 detail = `获得收益: ${result.data.score_amount}金币💰，`
             } else {
