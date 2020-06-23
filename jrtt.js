@@ -19,13 +19,11 @@ if (isGetCookie) {
 }
 
 function GetCookie() {
-    if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/sign_in/)) {
+    if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/sign_in\?(.*)/)) {
         const signurlVal = $request.url
         const signheaderVal = JSON.stringify($request.headers);
-        sy.log(`signurlVal:${signurlVal}`)
-        sy.log(`signheaderVal:${signheaderVal}`)
-        if (signurlVal) sy.setdata(signurlVal,
-            signurlKey)
+        sy.log(`signurlVal:${signurlVal}`) sy.log(`signheaderVal:${signheaderVal}`) if (signurlVal) sy.setdata(signurlVal,
+                signurlKey)
         if (signheaderVal) sy.setdata(signheaderVal, signheaderKey)
         sy.msg(CookieName, `获取签到地址: 成功`, ``)
     } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/user\/profit_detail/)) {
