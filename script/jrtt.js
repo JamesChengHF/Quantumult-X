@@ -53,7 +53,6 @@ function GetCookie() {
     }
 }
 async function all() {
-    await getsign();
     await signinfo();
     if (boxinfoval) {
         if (boxinfoval.data.current_time >= next_treasure_time) {
@@ -62,6 +61,7 @@ async function all() {
     } else {
         await getbox();
     }
+    await getsign();
 }
 
 //签到
