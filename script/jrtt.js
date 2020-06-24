@@ -95,7 +95,7 @@ function signinfo() {
             headers: JSON.parse(infoheaderVal)
         }
         sy.post(infourl, (error, response, data) => {
-            //sy.log(`${CookieName}, data: ${data}`)
+            sy.log(`${CookieName}, data: ${data}`)
             let result = JSON.parse(data)
             if (result.err_no == 0) {
                 signcoin = `金币总计: ${result.data.score.amount}💰，`
