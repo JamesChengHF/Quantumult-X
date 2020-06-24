@@ -95,7 +95,7 @@ function signinfo() {
             headers: JSON.parse(infoheaderVal)
         }
         sy.post(infourl, (error, response, data) => {
-            sy.log(`${CookieName}, data: ${data}`)
+            sy.log(`${CookieName}, 收益: ${data}`)
             let result = JSON.parse(data)
             if (result.err_no == 0) {
                 signcoin = `金币总计: ${result.data.score.amount}💰，`
@@ -115,7 +115,7 @@ function getbox() {
             headers: JSON.parse(boxheaderVal)
         }
         sy.post(boxurl, (error, response, data) => {
-            sy.log(`${CookieName}, data: ${data}`)
+            sy.log(`${CookieName}, 宝箱: ${data}`)
             let result = JSON.parse(data)
             if (result.err_no == 0) {
                 sy.setdata(boxinfoval, boxinfokey)
