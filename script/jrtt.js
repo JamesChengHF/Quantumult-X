@@ -54,13 +54,7 @@ function GetCookie() {
 }
 async function all() {
     await signinfo();
-    if (boxinfoval) {
-        if (boxinfoval.data.current_time >= next_treasure_time) {
-            await getbox();
-        }
-    } else {
-        await getbox();
-    }
+    await getbox();
     await getsign();
 }
 
