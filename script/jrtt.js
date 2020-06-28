@@ -106,8 +106,8 @@ function signinfo() {
                 cashdetail += '现金余额' + result.data.cash.amount
             }
             //sy.msg(CookieName, signres, detail)
+            resolve()
         })
-        resolve()
     })
 }
 
