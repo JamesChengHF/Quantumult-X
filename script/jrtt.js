@@ -60,73 +60,64 @@ async function all() {
 
 //签到
 function getsign() {
-    return new Promise((resolve, reject) => {
-        let signurl = {
-            url: signurlVal,
-            headers: JSON.parse(signheaderVal)
+    let signurl = {
+        url: signurlVal,
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.post(signurl, (error, response, data) => {
+        sy.log(`${CookieName}, data: ${data}`)
+        let result = JSON.parse(data)
+        if (result.err_no == 0) {
+            signres = `签到成功🎉`
+            detail = `获得收益: ${result.data.score_amount}金币💰，`
+        } else if (result.err_tips == "已经完成过") {
+            signres = `已经签到过❌`
+            detail = `不用重复签到`
+                //sy.msg(CookieName, signres, detail)
+        } else {
+            signres = `签到失败❌`
+            detail = `说明: ` + result.err_tips
+            sy.msg(CookieName, signres, detail)
+            return
         }
-        sy.post(signurl, (error, response, data) => {
-            sy.log(`${CookieName}, data: ${data}`)
-            let result = JSON.parse(data)
-            if (result.err_no == 0) {
-                signres = `签到成功🎉`
-                detail = `获得收益: ${result.data.score_amount}金币💰，`
-            } else if (result.err_tips == "已经完成过") {
-                signres = `已经签到过❌`
-                detail = `不用重复签到`
-                    //sy.msg(CookieName, signres, detail)
-            } else {
-                signres = `签到失败❌`
-                detail = `说明: ` + result.err_tips
-                sy.msg(CookieName, signres, detail)
-                return
-            }
-            resolve()
-        })
     })
 }
 
 function signinfo() {
-    return new Promise((resolve, reject) => {
-        let infourl = {
-            url: infourlVal,
-            headers: JSON.parse(infoheaderVal)
+    let infourl = {
+        url: infourlVal,
+        headers: JSON.parse(infoheaderVal)
+    }
+    sy.get(infourl, (error, response, data) => {
+        sy.log(`${CookieName}, 收益: ${data}`)
+        let result = JSON.parse(data)
+        if (result.err_no == 0) {
+            signcoin = `金币总计: ${result.data.score.amount}💰，`
+            cashdetail += '现金余额' + result.data.cash.amount
         }
-        sy.get(infourl, (error, response, data) => {
-            sy.log(`${CookieName}, 收益: ${data}`)
-            let result = JSON.parse(data)
-            if (result.err_no == 0) {
-                signcoin = `金币总计: ${result.data.score.amount}💰，`
-                cashdetail += '现金余额' + result.data.cash.amount
-            }
-            //sy.msg(CookieName, signres, detail)
-            resolve()
-        })
+        //sy.msg(CookieName, signres, detail)
     })
 }
 
 //开宝箱
 function getbox() {
-    return new Promise((resolve, reject) => {
-        let boxurl = {
-            url: boxurlval,
-            headers: JSON.parse(boxheaderVal)
+    let boxurl = {
+        url: boxurlval,
+        headers: JSON.parse(boxheaderVal)
+    }
+    sy.post(boxurl, (error, response, data) => {
+        sy.log(`${CookieName}, 宝箱: ${data}`)
+        let result = JSON.parse(data)
+        if (result.err_no == 0) {
+            sy.setdata(boxinfoval, boxinfokey)
+            boxres = `开宝箱成功🎉`
+            detail = `获得收益: ${result.data.score_amount}金币💰，${signcoin} ${cashdetail}`
+        } else {
+            boxres = `开宝箱失败❌`
+            detail = `说明: ` + result.err_tips
+            sy.msg(CookieName, boxres, detail)
+            return
         }
-        sy.post(boxurl, (error, response, data) => {
-            sy.log(`${CookieName}, 宝箱: ${data}`)
-            let result = JSON.parse(data)
-            if (result.err_no == 0) {
-                sy.setdata(boxinfoval, boxinfokey)
-                boxres = `开宝箱成功🎉`
-                detail = `获得收益: ${result.data.score_amount}金币💰，${signcoin} ${cashdetail}`
-            } else {
-                boxres = `开宝箱失败❌`
-                detail = `说明: ` + result.err_tips
-                sy.msg(CookieName, boxres, detail)
-                return
-            }
-            resolve()
-        })
     })
 }
 
