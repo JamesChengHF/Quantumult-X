@@ -105,6 +105,7 @@ function getbox() {
         url: boxurlval,
         headers: JSON.parse(boxheaderVal)
     }
+    sy.log(`${CookieName}, 宝箱2: ${boxurlval}`)
     sy.post(boxurl, (error, response, data) => {
         sy.log(`${CookieName}, 宝箱: ${data}`)
         let result = JSON.parse(data)
