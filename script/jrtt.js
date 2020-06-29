@@ -113,6 +113,7 @@ function signinfo() {
 function getbox() {
     sy.log(`${CookieName}, 宝箱3: `)
     return new Promise((resolve, reject) => {
+        sy.log(`${CookieName}, 宝箱4: `)
         let boxurl = {
             url: boxurlval,
             headers: JSON.parse(boxheaderVal)
