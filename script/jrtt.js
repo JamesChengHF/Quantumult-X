@@ -40,11 +40,11 @@ function GetCookie() {
         if (infoheaderVal) sy.setdata(infoheaderVal, infoheaderKey)
         sy.msg(CookieName, `获取信息Cookie: 成功`, ``)
     } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/open_treasure_box/)) {
-        const boxurlval = $request.url
+        const boxurlVal = $request.url
         const boxheaderVal = JSON.stringify($request.headers);
-        sy.log(`boxurlval:${boxurlval}`)
+        sy.log(`boxurlval:${boxurlVal}`)
         sy.log(`boxheaderVal:${boxheaderVal}`)
-        if (boxurlval) sy.setdata(boxurlval,
+        if (boxurlVal) sy.setdata(boxurlVal,
             boxkey)
         if (boxheaderVal) sy.setdata(boxheaderVal, boxheaderkey)
         sy.msg(CookieName, `获取宝箱信息: 成功`, ``)
@@ -109,14 +109,11 @@ function signinfo() {
 
 //开宝箱
 function getbox() {
-    sy.log(`${CookieName}, 宝箱3: `)
     return new Promise((resolve, reject) => {
-        sy.log(`${CookieName}, 宝箱4: ${boxurlval}`)
         let boxurl = {
-            url: boxurlval,
+            url: boxurlVal,
             headers: JSON.parse(boxheaderVal)
         }
-        sy.log(`${CookieName}, 宝箱2: ${boxurlval}`)
         sy.post(boxurl, (error, response, data) => {
             sy.log(`${CookieName}, 宝箱: ${data}`)
             let result = JSON.parse(data)
