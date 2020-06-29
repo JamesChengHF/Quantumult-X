@@ -13,6 +13,8 @@ const signheaderVal = sy.getdata(signheaderKey)
 const infoheaderVal = sy.getdata(infoheaderKey)
 const boxheaderVal = sy.getdata(boxheaderkey)
 
+const url_par = `?device_id=2647276587339464&device_platform=iphone&aid=35&os_version=13.5.1&update_version_code=7381&tma_jssdk_version=1.48.1.8&sid=&version_code=7.3.8&install_id=3667623378427758&app_name=news_article_lite&device_type=iPhone%20XR`
+
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
     GetCookie()
@@ -126,6 +128,93 @@ function getbox() {
                 sy.msg(CookieName, boxres, detail)
                 return
             }
+            resolve()
+        })
+    })
+}
+
+//游戏签到
+function getGameSign() {
+    return new Promise((resolve, reject) => {
+        let signurl = {
+            url: "https://i.snssdk.com/ttgame/game_farm/reward/sign_in" + url_par + "&watch_ad=0",
+            headers: JSON.parse(signheaderVal)
+        }
+        sy.post(signurl, (error, response, data) => {
+            let result = JSON.parse(data)
+            if (result.status_code == 0) {
+                signres = `签到成功🎉`
+                detail = `获得收益: ${result.data.score_amount}金币💰，`
+            }
+            resolve()
+        })
+    })
+}
+
+//游戏宝箱
+function open_box() {
+    return new Promise((resolve, reject) => {
+        let signurl = {
+            url: "https://i.snssdk.com/ttgame/game_farm/box/open" + url_par,
+            headers: JSON.parse(signheaderVal)
+        }
+        sy.post(signurl, (error, response, data) => {
+            let result = JSON.parse(data)
+            if (result.box_num > 0) {
+                open_box()
+            }
+            resolve()
+        })
+    })
+}
+
+//浇水
+function land_water() {
+    return new Promise((resolve, reject) => {
+        let signurl = {
+            url: "https://i.snssdk.com/ttgame/game_farm/land_water" + url_par,
+            headers: JSON.parse(signheaderVal)
+        }
+        sy.post(signurl, (error, response, data) => {
+            let result = JSON.parse(data)
+            if (result.data.water > 0) {
+                land_water()
+            }
+            resolve()
+        })
+    })
+}
+
+//领取
+function daily_task() {
+    return new Promise((resolve, reject) => {
+        let signurl = {
+            url: "https://i.snssdk.com/ttgame/game_farm/daily_task/list" + url_par,
+            headers: JSON.parse(signheaderVal)
+        }
+        sy.post(signurl, (error, response, data) => {
+            let result = JSON.parse(data)
+            if (result.status_code == 0) {
+                var step;
+                for (step = 0; step < result.data.length; step++) {
+                    if (result.data[step]["status"] == 1) {
+                        task_reward(result.data[step]["task_id"])
+                    }
+                }
+            }
+            resolve()
+        })
+    })
+}
+
+function task_reward(task_id) {
+    return new Promise((resolve, reject) => {
+        let signurl = {
+            url: "https://i.snssdk.com/ttgame/game_farm/reward/task" + url_par + "&task_id=" + task_id,
+            headers: JSON.parse(signheaderVal)
+        }
+        sy.post(signurl, (error, response, data) => {
+            let result = JSON.parse(data)
             resolve()
         })
     })
