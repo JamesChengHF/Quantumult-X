@@ -55,8 +55,8 @@ function GetCookie() {
 }
 async function all() {
     await getsign();
-    await signinfo();
     await getbox();
+    await signinfo();
 }
 
 //签到
@@ -99,6 +99,9 @@ function signinfo() {
             if (result.err_no == 0) {
                 signcoin = `金币总计: ${result.data.score.amount}💰，`
                 cashdetail += '现金余额' + result.data.cash.amount
+                sy.msg(CookieName, signcoin, cashdetail)
+            } else {
+                return
             }
             //sy.msg(CookieName, signres, detail)
             resolve()
