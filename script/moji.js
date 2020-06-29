@@ -22,24 +22,6 @@ function GetCookie() {
             signurlKey)
         if (signheaderVal) sy.setdata(signheaderVal, signheaderKey)
         sy.msg(CookieName, `获取签到地址: 成功`, ``)
-    } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/user\/info/)) {
-        const infourlVal = $request.url
-        const infoheaderVal = JSON.stringify($request.headers);
-        sy.log(`infourlVal:${infourlVal}`)
-        sy.log(`infoheaderVal:${infoheaderVal}`)
-        if (infourlVal) sy.setdata(infourlVal,
-            infourlKey)
-        if (infoheaderVal) sy.setdata(infoheaderVal, infoheaderKey)
-        sy.msg(CookieName, `获取信息Cookie: 成功`, ``)
-    } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/open_treasure_box/)) {
-        const boxurlval = $request.url
-        const boxheaderVal = JSON.stringify($request.headers);
-        sy.log(`boxurlval:${boxurlval}`)
-        sy.log(`boxheaderVal:${boxheaderVal}`)
-        if (boxurlval) sy.setdata(boxurlval,
-            boxkey)
-        if (boxheaderVal) sy.setdata(boxheaderVal, boxheaderkey)
-        sy.msg(CookieName, `获取宝箱信息: 成功`, ``)
     }
     sy.done()
 }
@@ -60,6 +42,7 @@ function getsign() {
             if (result.status == 1) {
                 signres = `签到成功🎉 连续签到 ${result.continuous_day_count} 天`
                 detail = `获得收益: ${result.reward_yuan}元💰，总共：${result.total_reward}元💰`
+                sy.msg(CookieName, signres, detail)
             } else if (result.status == 2) {
                 signres = `已经签到过❌`
                 detail = `不用重复签到`
