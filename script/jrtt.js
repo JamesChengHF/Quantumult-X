@@ -94,7 +94,7 @@ function signinfo() {
             headers: JSON.parse(infoheaderVal)
         }
         sy.get(infourl, (error, response, data) => {
-            //sy.log(`${CookieName}, 收益: ${data}`)
+            sy.log(`${CookieName}, 收益: ${data}`)
             let result = JSON.parse(data)
             if (result.err_no == 0) {
                 signcoin = `金币总计: ${result.data.score.amount}💰，`
@@ -108,6 +108,7 @@ function signinfo() {
 
 //开宝箱
 function getbox() {
+    sy.log(`${CookieName}, 宝箱3: `)
     return new Promise((resolve, reject) => {
         let boxurl = {
             url: boxurlval,
@@ -174,4 +175,3 @@ function init() {
     }
     return { isSurge, isQuanX, msg, log, getdata, setdata, get, post, done }
 }
-sy.done()
