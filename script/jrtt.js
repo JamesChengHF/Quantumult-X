@@ -2,7 +2,6 @@ const CookieName = '今日头条'
 const signurlKey = `tt_signurl_news`
 const infourlKey = `tt_info_news`
 const boxkey = `tt_box_news`
-const boxinfokey = `tt_box_info_news`
 const signheaderKey = `tt_ck_news`
 const infoheaderKey = `tt_infoheader_news`
 const boxheaderkey = `tt_boxheader_news`
@@ -13,7 +12,6 @@ const boxlurlVal = sy.getdata(boxkey)
 const signheaderVal = sy.getdata(signheaderKey)
 const infoheaderVal = sy.getdata(infoheaderKey)
 const boxheaderVal = sy.getdata(boxheaderkey)
-const boxinfoval = sy.getdata(boxinfokey)
 
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
@@ -113,7 +111,7 @@ function signinfo() {
 function getbox() {
     sy.log(`${CookieName}, 宝箱3: `)
     return new Promise((resolve, reject) => {
-        sy.log(`${CookieName}, 宝箱4: `)
+        sy.log(`${CookieName}, 宝箱4: ${boxurlval}`)
         let boxurl = {
             url: boxurlval,
             headers: JSON.parse(boxheaderVal)
@@ -123,7 +121,6 @@ function getbox() {
             sy.log(`${CookieName}, 宝箱: ${data}`)
             let result = JSON.parse(data)
             if (result.err_no == 0) {
-                sy.setdata(boxinfoval, boxinfokey)
                 boxres = `开宝箱成功🎉`
                 detail = `获得收益: ${result.data.score_amount}金币💰，${signcoin} ${cashdetail}`
             } else {
