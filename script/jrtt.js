@@ -51,74 +51,83 @@ function GetCookie() {
         if (boxheaderVal) sy.setdata(boxheaderVal, boxheaderkey)
         sy.msg(CookieName, `获取宝箱信息: 成功`, ``)
     }
+    sy.done()
 }
 async function all() {
+    await getsign();
     await signinfo();
     await getbox();
-    await getsign();
 }
 
 //签到
 function getsign() {
-    let signurl = {
-        url: signurlVal,
-        headers: JSON.parse(signheaderVal)
-    }
-    sy.post(signurl, (error, response, data) => {
-        sy.log(`${CookieName}, data: ${data}`)
-        let result = JSON.parse(data)
-        if (result.err_no == 0) {
-            signres = `签到成功🎉`
-            detail = `获得收益: ${result.data.score_amount}金币💰，`
-        } else if (result.err_tips == "已经完成过") {
-            signres = `已经签到过❌`
-            detail = `不用重复签到`
-                //sy.msg(CookieName, signres, detail)
-        } else {
-            signres = `签到失败❌`
-            detail = `说明: ` + result.err_tips
-            sy.msg(CookieName, signres, detail)
-            return
+    return new Promise((resolve, reject) => {
+        let signurl = {
+            url: signurlVal,
+            headers: JSON.parse(signheaderVal)
         }
+        sy.post(signurl, (error, response, data) => {
+            sy.log(`${CookieName}, data: ${data}`)
+            let result = JSON.parse(data)
+            if (result.err_no == 0) {
+                signres = `签到成功🎉`
+                detail = `获得收益: ${result.data.score_amount}金币💰，`
+            } else if (result.err_tips == "已经完成过") {
+                signres = `已经签到过❌`
+                detail = `不用重复签到`
+                    //sy.msg(CookieName, signres, detail)
+            } else {
+                signres = `签到失败❌`
+                detail = `说明: ` + result.err_tips
+                sy.msg(CookieName, signres, detail)
+                return
+            }
+            resolve()
+        })
     })
 }
 
 function signinfo() {
-    let infourl = {
-        url: infourlVal,
-        headers: JSON.parse(infoheaderVal)
-    }
-    sy.get(infourl, (error, response, data) => {
-        sy.log(`${CookieName}, 收益: ${data}`)
-        let result = JSON.parse(data)
-        if (result.err_no == 0) {
-            signcoin = `金币总计: ${result.data.score.amount}💰，`
-            cashdetail += '现金余额' + result.data.cash.amount
+    return new Promise((resolve, reject) => {
+        let infourl = {
+            url: infourlVal,
+            headers: JSON.parse(infoheaderVal)
         }
-        //sy.msg(CookieName, signres, detail)
+        sy.get(infourl, (error, response, data) => {
+            //sy.log(`${CookieName}, 收益: ${data}`)
+            let result = JSON.parse(data)
+            if (result.err_no == 0) {
+                signcoin = `金币总计: ${result.data.score.amount}💰，`
+                cashdetail += '现金余额' + result.data.cash.amount
+            }
+            //sy.msg(CookieName, signres, detail)
+            resolve()
+        })
     })
 }
 
 //开宝箱
 function getbox() {
-    let boxurl = {
-        url: boxurlval,
-        headers: JSON.parse(boxheaderVal)
-    }
-    sy.log(`${CookieName}, 宝箱2: ${boxurlval}`)
-    sy.post(boxurl, (error, response, data) => {
-        sy.log(`${CookieName}, 宝箱: ${data}`)
-        let result = JSON.parse(data)
-        if (result.err_no == 0) {
-            sy.setdata(boxinfoval, boxinfokey)
-            boxres = `开宝箱成功🎉`
-            detail = `获得收益: ${result.data.score_amount}金币💰，${signcoin} ${cashdetail}`
-        } else {
-            boxres = `开宝箱失败❌`
-            detail = `说明: ` + result.err_tips
-            sy.msg(CookieName, boxres, detail)
-            return
+    return new Promise((resolve, reject) => {
+        let boxurl = {
+            url: boxurlval,
+            headers: JSON.parse(boxheaderVal)
         }
+        sy.log(`${CookieName}, 宝箱2: ${boxurlval}`)
+        sy.post(boxurl, (error, response, data) => {
+            sy.log(`${CookieName}, 宝箱: ${data}`)
+            let result = JSON.parse(data)
+            if (result.err_no == 0) {
+                sy.setdata(boxinfoval, boxinfokey)
+                boxres = `开宝箱成功🎉`
+                detail = `获得收益: ${result.data.score_amount}金币💰，${signcoin} ${cashdetail}`
+            } else {
+                boxres = `开宝箱失败❌`
+                detail = `说明: ` + result.err_tips
+                sy.msg(CookieName, boxres, detail)
+                return
+            }
+        })
     })
 }
 
@@ -165,3 +174,4 @@ function init() {
     }
     return { isSurge, isQuanX, msg, log, getdata, setdata, get, post, done }
 }
+sy.done()
