@@ -131,6 +131,7 @@ function getbox() {
                 sy.msg(CookieName, boxres, detail)
                 return
             }
+            resolve()
         })
     })
 }
