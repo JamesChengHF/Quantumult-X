@@ -66,157 +66,138 @@ async function all() {
 
 //签到
 function getsign() {
-    return new Promise((resolve, reject) => {
-        let signurl = {
-            url: signurlVal,
-            headers: JSON.parse(signheaderVal)
+    let signurl = {
+        url: signurlVal,
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.post(signurl, (error, response, data) => {
+        sy.log(`${CookieName}, data: ${data}`)
+        let result = JSON.parse(data)
+        if (result.err_no == 0) {
+            signres = `签到成功🎉`
+            detail = `获得收益: ${result.data.score_amount}金币💰，`
+        } else if (result.err_tips == "已经完成过") {
+            signres = `已经签到过❌`
+            detail = `不用重复签到`
+                //sy.msg(CookieName, signres, detail)
         }
-        sy.post(signurl, (error, response, data) => {
-            sy.log(`${CookieName}, data: ${data}`)
-            let result = JSON.parse(data)
-            if (result.err_no == 0) {
-                signres = `签到成功🎉`
-                detail = `获得收益: ${result.data.score_amount}金币💰，`
-            } else if (result.err_tips == "已经完成过") {
-                signres = `已经签到过❌`
-                detail = `不用重复签到`
-                    //sy.msg(CookieName, signres, detail)
-            }
-            resolve()
-        })
     })
 }
 
 function signinfo() {
-    return new Promise((resolve, reject) => {
-        let infourl = {
-            url: infourlVal,
-            headers: JSON.parse(infoheaderVal)
+    let infourl = {
+        url: infourlVal,
+        headers: JSON.parse(infoheaderVal)
+    }
+    sy.get(infourl, (error, response, data) => {
+        sy.log(`${CookieName}, 收益: ${data}`)
+        let result = JSON.parse(data)
+        if (result.err_no == 0) {
+            signcoin = `金币总计: ${result.data.score.amount}💰，`
+            cashdetail += '现金余额' + result.data.cash.amount
+            sy.msg(CookieName, signcoin, cashdetail)
+        } else {
+            return
         }
-        sy.get(infourl, (error, response, data) => {
-            sy.log(`${CookieName}, 收益: ${data}`)
-            let result = JSON.parse(data)
-            if (result.err_no == 0) {
-                signcoin = `金币总计: ${result.data.score.amount}💰，`
-                cashdetail += '现金余额' + result.data.cash.amount
-                sy.msg(CookieName, signcoin, cashdetail)
-            } else {
-                return
-            }
-            //sy.msg(CookieName, signres, detail)
-            resolve()
-        })
+        //sy.msg(CookieName, signres, detail)
     })
 }
 
 //开宝箱
 function getbox() {
-    return new Promise((resolve, reject) => {
-        let boxurl = {
-            url: boxurlVal,
-            headers: JSON.parse(boxheaderVal)
+    let boxurl = {
+        url: boxurlVal,
+        headers: JSON.parse(boxheaderVal)
+    }
+    sy.post(boxurl, (error, response, data) => {
+        sy.log(`${CookieName}, 宝箱: ${data}`)
+        let result = JSON.parse(data)
+        if (result.err_no == 0) {
+            boxres = `开宝箱成功🎉`
+            detail = `获得收益: ${result.data.score_amount}金币💰，${signcoin} ${cashdetail}`
         }
-        sy.post(boxurl, (error, response, data) => {
-            sy.log(`${CookieName}, 宝箱: ${data}`)
-            let result = JSON.parse(data)
-            if (result.err_no == 0) {
-                boxres = `开宝箱成功🎉`
-                detail = `获得收益: ${result.data.score_amount}金币💰，${signcoin} ${cashdetail}`
-            }
-            resolve()
-        })
     })
 }
 
 //游戏签到
 function getGameSign() {
-    return new Promise((resolve, reject) => {
-        let signurl = {
-            url: "https://i.snssdk.com/ttgame/game_farm/reward/sign_in" + url_par + "&watch_ad=0",
-            headers: JSON.parse(signheaderVal)
+    let signurl = {
+        url: "https://i.snssdk.com/ttgame/game_farm/reward/sign_in" + url_par + "&watch_ad=0",
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.get(signurl, (error, response, data) => {
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, 游戏签到: ${data}`)
+        if (result.status_code == 0) {
+            signres = `签到成功🎉`
+            detail = `获得收益: ${result.data.score_amount}金币💰，`
         }
-        sy.post(signurl, (error, response, data) => {
-            let result = JSON.parse(data)
-            sy.log(`${CookieName}, data: ${result}`)
-            if (result.status_code == 0) {
-                signres = `签到成功🎉`
-                detail = `获得收益: ${result.data.score_amount}金币💰，`
-            }
-            resolve()
-        })
     })
 }
 
 //游戏宝箱
 function open_box() {
-    return new Promise((resolve, reject) => {
-        let signurl = {
-            url: "https://i.snssdk.com/ttgame/game_farm/box/open" + url_par,
-            headers: JSON.parse(signheaderVal)
-        }
-        sy.post(signurl, (error, response, data) => {
-            let result = JSON.parse(data)
-            sy.log(`${CookieName}, data: ${result}`)
-            if (result.box_num > 0) {
+    let signurl = {
+        url: "https://i.snssdk.com/ttgame/game_farm/box/open" + url_par,
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.get(signurl, (error, response, data) => {
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, 游戏宝箱: ${data}`)
+        if (result.status_code == 0) {
+            if (result.data.box_num > 0) {
                 open_box()
             }
-            resolve()
-        })
+        }
     })
 }
 
 //浇水
 function land_water() {
-    return new Promise((resolve, reject) => {
-        let signurl = {
-            url: "https://i.snssdk.com/ttgame/game_farm/land_water" + url_par,
-            headers: JSON.parse(signheaderVal)
-        }
-        sy.post(signurl, (error, response, data) => {
-            let result = JSON.parse(data)
-            sy.log(`${CookieName}, data: ${result}`)
-            if (result.data.water > 0) {
+    let signurl = {
+        url: "https://i.snssdk.com/ttgame/game_farm/land_water" + url_par,
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.get(signurl, (error, response, data) => {
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, 浇水: ${result.data.water}`)
+        if (result.data.water > 0) {
+            var step;
+            for (step = 0; step < result.data.water / 10; step++) {
                 land_water()
             }
-            resolve()
-        })
+        }
     })
 }
 
 //领取
 function daily_task() {
-    return new Promise((resolve, reject) => {
-        let signurl = {
-            url: "https://i.snssdk.com/ttgame/game_farm/daily_task/list" + url_par,
-            headers: JSON.parse(signheaderVal)
-        }
-        sy.post(signurl, (error, response, data) => {
-            let result = JSON.parse(data)
-            sy.log(`${CookieName}, data: ${result}`)
-            if (result.status_code == 0) {
-                var step;
-                for (step = 0; step < result.data.length; step++) {
-                    if (result.data[step]["status"] == 1) {
-                        task_reward(result.data[step]["task_id"])
-                    }
+    let signurl = {
+        url: "https://i.snssdk.com/ttgame/game_farm/daily_task/list" + url_par,
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.get(signurl, (error, response, data) => {
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, 任务领取: ${data}`)
+        if (result.status_code == 0) {
+            var step;
+            for (step = 0; step < result.data.length; step++) {
+                if (result.data[step]["status"] == 1) {
+                    task_reward(result.data[step]["task_id"])
                 }
             }
-            resolve()
-        })
+        }
     })
 }
 
 function task_reward(task_id) {
-    return new Promise((resolve, reject) => {
-        let signurl = {
-            url: "https://i.snssdk.com/ttgame/game_farm/reward/task" + url_par + "&task_id=" + task_id,
-            headers: JSON.parse(signheaderVal)
-        }
-        sy.post(signurl, (error, response, data) => {
-            let result = JSON.parse(data)
-            sy.log(`${CookieName}, data: ${result}`)
-            resolve()
-        })
+    let signurl = {
+        url: "https://i.snssdk.com/ttgame/game_farm/reward/task" + url_par + "&task_id=" + task_id,
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.get(signurl, (error, response, data) => {
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, 任务领取: ${data}`)
     })
 }
 
