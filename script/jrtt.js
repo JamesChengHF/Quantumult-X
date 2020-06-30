@@ -76,11 +76,6 @@ function getsign() {
                 signres = `已经签到过❌`
                 detail = `不用重复签到`
                     //sy.msg(CookieName, signres, detail)
-            } else {
-                signres = `签到失败❌`
-                detail = `说明: ` + result.err_tips
-                sy.msg(CookieName, signres, detail)
-                return
             }
             resolve()
         })
@@ -122,11 +117,6 @@ function getbox() {
             if (result.err_no == 0) {
                 boxres = `开宝箱成功🎉`
                 detail = `获得收益: ${result.data.score_amount}金币💰，${signcoin} ${cashdetail}`
-            } else {
-                boxres = `开宝箱失败❌`
-                detail = `说明: ` + result.err_tips
-                sy.msg(CookieName, boxres, detail)
-                return
             }
             resolve()
         })
