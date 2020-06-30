@@ -1,6 +1,9 @@
 const CookieName = '墨迹天气'
 const signurlKey = `moji_signurl`
 const signheaderKey = `moji_ck`
+const user_id_key = `user_id_key`
+const sns_id_key = `sns_id_key`
+const client_id = `client_id`
 const sy = init()
 const signurlVal = sy.getdata(signurlKey)
 const signheaderVal = sy.getdata(signheaderKey)
@@ -33,8 +36,8 @@ async function all() {
 function getsign() {
     return new Promise((resolve, reject) => {
         let signurl = {
-            url: "https://rtn.api.moji.com/ucrating/sign_in/do",
-            headers: JSON.parse(signheaderVal)
+            url: "https://rtn.api.moji.com/ucrating/sign_in/do" + JSON.parse(signheaderVal),
+            //headers: JSON.parse(signheaderVal)
         }
         sy.post(signurl, (error, response, data) => {
             sy.log(`${CookieName}, data: ${data}`)
