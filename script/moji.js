@@ -13,7 +13,7 @@ if (isGetCookie) {
 }
 
 function GetCookie() {
-    if ($request && $request.method != 'OPTIONS' && $request.url.match(/ucrating\/sign_in\/do/)) {
+    if ($request && $request.method != 'OPTIONS' && $request.url.match(/ucrating\/sign_in\/homepage/)) {
         const signurlVal = $request.url
         const signheaderVal = JSON.stringify($request.headers);
         sy.log(`signurlVal:${signurlVal}`)
@@ -21,7 +21,7 @@ function GetCookie() {
         if (signurlVal) sy.setdata(signurlVal,
             signurlKey)
         if (signheaderVal) sy.setdata(signheaderVal, signheaderKey)
-        sy.msg(CookieName, `获取签到地址: 成功`, ``)
+        sy.msg(CookieName, `获取信息: 成功`, ``)
     }
     sy.done()
 }
@@ -33,7 +33,7 @@ async function all() {
 function getsign() {
     return new Promise((resolve, reject) => {
         let signurl = {
-            url: signurlVal,
+            url: "https://rtn.api.moji.com/ucrating/sign_in/do",
             headers: JSON.parse(signheaderVal)
         }
         sy.post(signurl, (error, response, data) => {
