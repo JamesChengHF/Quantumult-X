@@ -1,12 +1,11 @@
 const CookieName = '墨迹天气'
 const signurlKey = `moji_signurl`
 const signheaderKey = `moji_ck`
-const user_id_key = `user_id_key`
-const sns_id_key = `sns_id_key`
-const client_id = `client_id`
+const params_key = `params_key`
 const sy = init()
 const signurlVal = sy.getdata(signurlKey)
 const signheaderVal = sy.getdata(signheaderKey)
+const params_val = sy.getdata(params_key)
 
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
@@ -18,12 +17,14 @@ if (isGetCookie) {
 function GetCookie() {
     if ($request && $request.method != 'OPTIONS' && $request.url.match(/ucrating\/sign_in\/homepage/)) {
         const signurlVal = $request.url
+        const params_val = signurlVal.split(`?`)[1]
         const signheaderVal = JSON.stringify($request.headers);
         sy.log(`signurlVal:${signurlVal}`)
         sy.log(`signheaderVal:${signheaderVal}`)
         if (signurlVal) sy.setdata(signurlVal,
             signurlKey)
         if (signheaderVal) sy.setdata(signheaderVal, signheaderKey)
+        if (params_val) sy.setdata(params_val, params_key)
         sy.msg(CookieName, `获取信息: 成功`, ``)
     }
     sy.done()
@@ -36,8 +37,8 @@ async function all() {
 function getsign() {
     return new Promise((resolve, reject) => {
         let signurl = {
-            url: "https://rtn.api.moji.com/ucrating/sign_in/do" + JSON.parse(signheaderVal),
-            //headers: JSON.parse(signheaderVal)
+            url: `https://rtn.api.moji.com/ucrating/sign_in/do?${params_val}`,
+            headers: JSON.parse(signheaderVal)
         }
         sy.post(signurl, (error, response, data) => {
             sy.log(`${CookieName}, data: ${data}`)
