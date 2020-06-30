@@ -137,6 +137,7 @@ function getGameSign() {
         }
         sy.post(signurl, (error, response, data) => {
             let result = JSON.parse(data)
+            sy.log(`${CookieName}, data: ${result}`)
             if (result.status_code == 0) {
                 signres = `签到成功🎉`
                 detail = `获得收益: ${result.data.score_amount}金币💰，`
@@ -155,6 +156,7 @@ function open_box() {
         }
         sy.post(signurl, (error, response, data) => {
             let result = JSON.parse(data)
+            sy.log(`${CookieName}, data: ${result}`)
             if (result.box_num > 0) {
                 open_box()
             }
@@ -172,6 +174,7 @@ function land_water() {
         }
         sy.post(signurl, (error, response, data) => {
             let result = JSON.parse(data)
+            sy.log(`${CookieName}, data: ${result}`)
             if (result.data.water > 0) {
                 land_water()
             }
@@ -189,6 +192,7 @@ function daily_task() {
         }
         sy.post(signurl, (error, response, data) => {
             let result = JSON.parse(data)
+            sy.log(`${CookieName}, data: ${result}`)
             if (result.status_code == 0) {
                 var step;
                 for (step = 0; step < result.data.length; step++) {
@@ -210,6 +214,7 @@ function task_reward(task_id) {
         }
         sy.post(signurl, (error, response, data) => {
             let result = JSON.parse(data)
+            sy.log(`${CookieName}, data: ${result}`)
             resolve()
         })
     })
