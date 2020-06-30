@@ -56,6 +56,11 @@ function GetCookie() {
 async function all() {
     await getsign();
     await getbox();
+    await getGameSign();
+    await open_box();
+    await land_water();
+    await daily_task();
+    await task_reward();
     await signinfo();
 }
 
