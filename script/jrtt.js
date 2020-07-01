@@ -61,6 +61,7 @@ async function all() {
     await land_water();
     await daily_task();
     await task_reward();
+    await game_farm_list();
     await signinfo();
 }
 
@@ -167,6 +168,23 @@ function land_water() {
                 land_water()
             }
         }
+        if (result.data.info.length > 0) {
+            for (let _u = 0; _u < result.data.info.length; _u++) {
+                land_water()
+            }
+        }
+    })
+}
+
+//解锁土地
+function unblock_land() {
+    let signurl = {
+        url: "https://i.snssdk.com/ttgame/game_farm/land/unlock" + url_par + "&land_id=4",
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.get(signurl, (error, response, data) => {
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, 解锁土地: ${data}`)
     })
 }
 
@@ -198,6 +216,37 @@ function task_reward(task_id) {
     sy.get(signurl, (error, response, data) => {
         let result = JSON.parse(data)
         sy.log(`${CookieName}, 任务领取: ${data}`)
+    })
+}
+
+//三餐礼包
+function game_farm_list() {
+    let signurl = {
+        url: "https://i.snssdk.com/ttgame/game_farm/gift/list" + url_par,
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.get(signurl, (error, response, data) => {
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, 三餐礼包: ${data}`)
+        if (result.status_code == 0) {
+            var step;
+            for (step = 0; step < result.data.length; step++) {
+                if (result.data[step]["status"] == 1) {
+                    game_farm_reward(result.data[step]["task_id"])
+                }
+            }
+        }
+    })
+}
+
+function game_farm_reward() {
+    let signurl = {
+        url: "https://i.snssdk.com/ttgame/game_farm/reward/gift" + url_par + "&gift_id=" + task_id,
+        headers: JSON.parse(signheaderVal)
+    }
+    sy.get(signurl, (error, response, data) => {
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, 三餐领取: ${data}`)
     })
 }
 
