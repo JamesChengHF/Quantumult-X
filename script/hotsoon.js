@@ -1,10 +1,12 @@
-const CookieName = '今日头条'
-const signurlKey = `tt_signurl_news`
-const infourlKey = `tt_info_news`
-const boxkey = `tt_box_news`
-const signheaderKey = `tt_ck_news`
-const infoheaderKey = `tt_infoheader_news`
-const boxheaderkey = `tt_boxheader_news`
+const CookieName = '火山极速版'
+const signurlKey = `hotsoon_signurl`
+const infourlKey = `hotsoon_info`
+const boxkey = `hotsoon_box`
+const signheaderKey = `hotsoon_ck`
+const infoheaderKey = `hotsoon_infoheader`
+const boxheaderkey = `hotsoon_boxheader`
+const farmheaderKey = `hotsoon_headerkey`
+const farmparamKey = `hotsoon_param`
 const sy = init()
 const signurlVal = sy.getdata(signurlKey)
 const infourlVal = sy.getdata(infourlKey)
@@ -12,8 +14,10 @@ const boxurlVal = sy.getdata(boxkey)
 const signheaderVal = sy.getdata(signheaderKey)
 const infoheaderVal = sy.getdata(infoheaderKey)
 const boxheaderVal = sy.getdata(boxheaderkey)
+const farmheaderVal = sy.getdata(farmheaderKey)
+const farmparamVal = sy.getdata(farmparamKey)
 
-const url_par = `?device_id=2647276587339464&device_platform=iphone&aid=35&os_version=13.5.1&update_version_code=7381&tma_jssdk_version=1.48.1.8&sid=&version_code=7.3.8&install_id=3667623378427758&app_name=news_article_lite&device_type=iPhone%20XR`
+const domin_sns = `https://i-hl.snssdk.com`
 
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
@@ -32,16 +36,7 @@ function GetCookie() {
             signurlKey)
         if (signheaderVal) sy.setdata(signheaderVal, signheaderKey)
         sy.msg(CookieName, `获取签到地址: 成功`, ``)
-    } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/user\/info/)) {
-        const infourlVal = $request.url
-        const infoheaderVal = JSON.stringify($request.headers);
-        sy.log(`infourlVal:${infourlVal}`)
-        sy.log(`infoheaderVal:${infoheaderVal}`)
-        if (infourlVal) sy.setdata(infourlVal,
-            infourlKey)
-        if (infoheaderVal) sy.setdata(infoheaderVal, infoheaderKey)
-        sy.msg(CookieName, `获取信息Cookie: 成功`, ``)
-    } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/open_treasure_box/)) {
+    } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/done\/treasure_task/)) {
         const boxurlVal = $request.url
         const boxheaderVal = JSON.stringify($request.headers);
         sy.log(`boxurlval:${boxurlVal}`)
@@ -50,6 +45,15 @@ function GetCookie() {
             boxkey)
         if (boxheaderVal) sy.setdata(boxheaderVal, boxheaderkey)
         sy.msg(CookieName, `获取宝箱信息: 成功`, ``)
+    } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/game_farm\/box\/open/)) {
+        const farmurlVal = $request.url
+        const farmparamVal = farmurlVal.split(`?`)[1]
+        const farmheaderVal = JSON.stringify($request.headers);
+        sy.log(`farmheaderVal:${farmheaderVal}`)
+        sy.log(`farmparamVal:${farmparamVal}`)
+        if (farmheaderVal) sy.setdata(farmheaderVal, farmheaderKey)
+        if (farmparamVal) sy.setdata(farmparamVal, farmparamKey)
+        sy.msg(CookieName, `获取农场信息: 成功`, ``)
     }
     sy.done()
 }
@@ -139,7 +143,7 @@ function getGameSign() {
 //游戏宝箱
 function open_box() {
     let signurl = {
-        url: "https://i.snssdk.com/ttgame/game_farm/box/open" + url_par,
+        url: domin_sns + "/ttgame/game_farm/box/open" + farmparamVal,
         headers: JSON.parse(signheaderVal)
     }
     sy.get(signurl, (error, response, data) => {
@@ -156,7 +160,7 @@ function open_box() {
 //浇水
 function land_water() {
     let signurl = {
-        url: "https://i.snssdk.com/ttgame/game_farm/land_water" + url_par,
+        url: domin_sns + "/ttgame/game_farm/land_water" + url_par,
         headers: JSON.parse(signheaderVal)
     }
     sy.get(signurl, (error, response, data) => {
@@ -183,7 +187,7 @@ function land_water() {
 //解锁土地
 function unblock_land(land_id) {
     let signurl = {
-        url: "https://i.snssdk.com/ttgame/game_farm/land/unlock" + url_par + "&land_id" + land_id,
+        url: domin_sns + "/ttgame/game_farm/land/unlock" + url_par + "&land_id=" + land_id,
         headers: JSON.parse(signheaderVal)
     }
     sy.get(signurl, (error, response, data) => {
@@ -195,7 +199,7 @@ function unblock_land(land_id) {
 //领取
 function daily_task() {
     let signurl = {
-        url: "https://i.snssdk.com/ttgame/game_farm/daily_task/list" + url_par,
+        url: domin_sns + "/ttgame/game_farm/daily_task/list" + url_par,
         headers: JSON.parse(signheaderVal)
     }
     sy.get(signurl, (error, response, data) => {
@@ -214,7 +218,7 @@ function daily_task() {
 
 function task_reward(task_id) {
     let signurl = {
-        url: "https://i.snssdk.com/ttgame/game_farm/reward/task" + url_par + "&task_id=" + task_id,
+        url: domin_sns + "/ttgame/game_farm/reward/task" + url_par + "&task_id=" + task_id,
         headers: JSON.parse(signheaderVal)
     }
     sy.get(signurl, (error, response, data) => {
@@ -226,7 +230,7 @@ function task_reward(task_id) {
 //三餐礼包
 function game_farm_list() {
     let signurl = {
-        url: "https://i.snssdk.com/ttgame/game_farm/gift/list" + url_par,
+        url: domin_sns + "/ttgame/game_farm/gift/list" + url_par,
         headers: JSON.parse(signheaderVal)
     }
     sy.get(signurl, (error, response, data) => {
@@ -245,7 +249,7 @@ function game_farm_list() {
 
 function game_farm_reward() {
     let signurl = {
-        url: "https://i.snssdk.com/ttgame/game_farm/reward/gift" + url_par + "&gift_id=" + task_id,
+        url: domin_sns + "/ttgame/game_farm/reward/gift" + url_par + "&gift_id=" + task_id,
         headers: JSON.parse(signheaderVal)
     }
     sy.get(signurl, (error, response, data) => {
