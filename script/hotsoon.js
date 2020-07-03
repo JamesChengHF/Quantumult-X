@@ -17,7 +17,7 @@ const boxheaderVal = sy.getdata(boxheaderkey)
 const farmheaderVal = sy.getdata(farmheaderKey)
 const farmparamVal = sy.getdata(farmparamKey)
 
-const domin_sns = `https://i-hl.snssdk.com`
+const domin_sns = "https://i-hl.snssdk.com"
 
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
@@ -27,7 +27,7 @@ if (isGetCookie) {
 }
 
 function GetCookie() {
-    if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/sign_in\/\?.*/)) {
+    if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/sign_in_detail\/\?.*/)) {
         const signurlVal = $request.url
         const signheaderVal = JSON.stringify($request.headers);
         sy.log(`signurlVal:${signurlVal}`)
@@ -72,7 +72,7 @@ async function all() {
 //签到
 function getsign() {
     let signurl = {
-        url: signurlVal,
+        url: "https://ib-hl.snssdk.com/luckycat/hotsoon/v1/task/sign_in",
         headers: JSON.parse(signheaderVal)
     }
     sy.post(signurl, (error, response, data) => {
