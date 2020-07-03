@@ -27,7 +27,7 @@ if (isGetCookie) {
 }
 
 function GetCookie() {
-    if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/sign_in_detail\/\?.*/)) {
+    if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/sign_in_detail/)) {
         const signurlVal = $request.url
         const signheaderVal = JSON.stringify($request.headers);
         sy.log(`signurlVal:${signurlVal}`)
