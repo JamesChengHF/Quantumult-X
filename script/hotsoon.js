@@ -27,7 +27,7 @@ if (isGetCookie) {
 }
 
 function GetCookie() {
-    if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/sign_in_detail/)) {
+    if ($request && $request.method != 'OPTIONS' && $request.url.match(/task\/sign_in/)) {
         const signurlVal = $request.url
         const signheaderVal = JSON.stringify($request.headers);
         sy.log(`signurlVal:${signurlVal}`)
@@ -72,7 +72,7 @@ async function all() {
 //签到
 function getsign() {
     let signurl = {
-        url: "https://ib-hl.snssdk.com/luckycat/hotsoon/v1/task/sign_in",
+        url: signurlVal,
         headers: JSON.parse(signheaderVal)
     }
     sy.post(signurl, (error, response, data) => {
