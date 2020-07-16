@@ -42,7 +42,7 @@ function GetCookie() {
     sy.done()
 }
 async function all() {
-    await getsign();
+    //await getsign();
     await getenergy();
 }
 
