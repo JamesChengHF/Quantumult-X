@@ -2,10 +2,14 @@ const CookieName = '墨迹天气'
 const signurlKey = `moji_signurl`
 const signheaderKey = `moji_ck`
 const params_key = `params_key`
+const sun_key = `sun_key`
+const sun_header_key = `sun_header_key`
 const sy = init()
 const signurlVal = sy.getdata(signurlKey)
 const signheaderVal = sy.getdata(signheaderKey)
 const params_val = sy.getdata(params_key)
+const sun_val = sy.getdata(sun_key)
+const sun_header_val = sy.getdata(sun_header_key)
 
 let isGetCookie = typeof $request !== 'undefined'
 if (isGetCookie) {
@@ -26,11 +30,20 @@ function GetCookie() {
         if (signheaderVal) sy.setdata(signheaderVal, signheaderKey)
         if (params_val) sy.setdata(params_val, params_key)
         sy.msg(CookieName, `获取信息: 成功`, ``)
+    } else if ($request && $request.method != 'OPTIONS' && $request.url.match(/suncharge\/energyHarvesting/)) {
+        const sun_val = $request.url
+        const sun_header_val = JSON.stringify($request.headers);
+        sy.log(`sun_val:${sun_val}`)
+        sy.log(`sun_header_val:${sun_header_val}`)
+        if (sun_val) sy.setdata(sun_val, sun_key)
+        if (sun_header_val) sy.setdata(sun_header_val, sun_header_key)
+        sy.msg(CookieName, `获取收集阳光信息: 成功`, ``)
     }
     sy.done()
 }
 async function all() {
     await getsign();
+    await getenergy();
 }
 
 //签到
@@ -46,7 +59,7 @@ function getsign() {
             if (result.status == 1) {
                 signres = `签到成功🎉 连续签到 ${result.continuous_day_count} 天`
                 detail = `获得收益: ${result.reward_yuan}元💰，总共：${result.total_reward}元💰`
-                sy.msg(CookieName, signres, detail)
+                    //sy.msg(CookieName, signres, detail)
             } else if (result.status == 2) {
                 signres = `已经签到过❌`
                 detail = `不用重复签到`
@@ -54,11 +67,25 @@ function getsign() {
             } else {
                 signres = `签到失败❌`
                 detail = `说明: ` + result.err_tips
-                sy.msg(CookieName, signres, detail)
+                    //sy.msg(CookieName, signres, detail)
                 return
             }
             resolve()
         })
+    })
+}
+
+function getenergy() {
+    let infourl = {
+        url: sun_val,
+        headers: JSON.parse(sun_header_val)
+    }
+    sy.get(infourl, (error, response, data) => {
+        //sy.log(`${CookieName}, 收益: ${data}`)
+        let result = JSON.parse(data)
+        sy.log(`${CookieName}, data: ${result}`)
+        return
+        //sy.msg(CookieName, signres, detail)
     })
 }
 
